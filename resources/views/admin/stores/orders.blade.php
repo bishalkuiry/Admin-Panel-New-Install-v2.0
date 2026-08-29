@@ -1,0 +1,54 @@
+@extends('admin.layouts.app')
+@section('title', $store->name . ' - Orders')
+@section('content')
+<div class="space-y-5">
+    <div class="flex items-center gap-4">
+        <a href="{{ route('admin.stores.show', $store) }}" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </a>
+        <div>
+            <h1 class="text-xl font-semibold text-gray-900">{{ $store->name }} - Orders</h1>
+            <p class="text-sm text-gray-500 mt-1">View store orders</p>
+        </div>
+    </div>
+
+    @include('admin.stores._tabs', ['store' => $store])
+
+    <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="table-header">Order</th>
+                        <th class="table-header">Customer</th>
+                        <th class="table-header">Items</th>
+                        <th class="table-header">Total</th>
+                        <th class="table-header">Status</th>
+                        <th class="table-header">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @forelse($orders as $order)
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="table-cell font-mono font-semibold text-gray-900">#{{ $order->order_number }}</td>
+                        <td class="table-cell">{{ $order->user->name ?? 'Guest' }}</td>
+                        <td class="table-cell"><span class="badge badge-gray">{{ $order->items_count ?? $order->items->count() }}</span></td>
+                        <td class="table-cell font-semibold text-gray-900"><x-currency :amount="$order->total" /></td>
+                        <td class="table-cell"><span class="badge badge-{{ $order->status->color() }}">{{ $order->status->label() }}</span></td>
+                        <td class="table-cell text-gray-500 text-sm">{{ \App\Helpers\DateHelper::format($order->created_at) }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-16 text-center">
+                            <p class="font-medium text-gray-900">No orders yet</p>
+                            <p class="text-sm text-gray-500 mt-1">Orders will appear here when customers place them</p>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($orders->hasPages())<div class="px-5 py-4 border-t border-gray-100">{{ $orders->links() }}</div>@endif
+    </div>
+</div>
+@endsection

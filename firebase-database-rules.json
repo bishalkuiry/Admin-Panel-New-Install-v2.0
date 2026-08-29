@@ -1,0 +1,26 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "chats": {
+      "order_chats": {
+        "$chatId": {
+          ".read": "auth != null",
+          ".write": "auth != null",
+          "messages": {
+            "$messageId": {
+              ".read": "auth != null",
+              ".write": "auth != null"
+            }
+          }
+        }
+      },
+      "support_chats": {
+        "$chatId": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    }
+  }
+}

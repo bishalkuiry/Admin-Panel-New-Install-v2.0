@@ -1,0 +1,28 @@
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/vendor
+.env
+.env.*
+!.env.example
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+/.zed
+
+# Runtime state (created by the web installer / artisan)
+/storage/installed
+/storage/*.key
+
+# Bootstrap cache (compiled config/routes/services), keep the folder
+/bootstrap/cache/*.php
+
+# Locally uploaded plugins (installed at runtime, not part of source)
+/plugins/*
+!/plugins/.gitignore
