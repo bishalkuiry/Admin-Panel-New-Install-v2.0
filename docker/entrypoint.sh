@@ -7,7 +7,11 @@ if [ ! -f .env ] && [ -f .env.example ]; then
     cp .env.example .env
 fi
 
-if [ -z "$APP_KEY" ]; then
+# Check the .env file itself, not $APP_KEY: env_file bakes a stale/empty value
+# into every container's environment, which env() would otherwise prefer over
+# whatever key:generate later writes to disk, and each container would race
+# to regenerate its own key.
+if ! grep -qE '^APP_KEY=.+' .env 2>/dev/null; then
     php artisan key:generate --force
 fi
 

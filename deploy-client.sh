@@ -72,11 +72,16 @@ fi
 cd "$TARGET_DIR"
 
 DB_PASSWORD="$(openssl rand -base64 24 | tr -dc 'A-Za-z0-9')"
+# generated up front: docker-compose's env_file bakes .env into each
+# container's environment at creation time, so a key written later by
+# `artisan key:generate` at runtime would be shadowed by the empty value
+APP_KEY="base64:$(openssl rand -base64 32)"
 
 cp .env.example .env
 sed -i \
     -e "s|^APP_NAME=.*|APP_NAME=\"${CLIENT}\"|" \
     -e "s|^APP_ENV=.*|APP_ENV=production|" \
+    -e "s|^APP_KEY=.*|APP_KEY=${APP_KEY}|" \
     -e "s|^APP_DEBUG=.*|APP_DEBUG=false|" \
     -e "s|^APP_URL=.*|APP_URL=https://${DOMAIN}|" \
     -e "s|^DB_DATABASE=.*|DB_DATABASE=${CLIENT}_db|" \
