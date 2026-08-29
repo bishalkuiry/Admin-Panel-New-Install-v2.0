@@ -95,11 +95,11 @@ echo "==> Starting containers"
 docker compose up -d
 
 echo "==> Waiting for the database to accept connections"
-for i in $(seq 1 30); do
+for i in $(seq 1 40); do
     if docker compose exec -T db mysqladmin ping -h localhost -u"${CLIENT}" -p"${DB_PASSWORD}" --silent >/dev/null 2>&1; then
         break
     fi
-    sleep 2
+    sleep 3
 done
 
 echo "==> Running migrations"
