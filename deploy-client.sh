@@ -88,6 +88,11 @@ sed -i \
     .env
 echo "COMPOSE_PROJECT_NAME=${CLIENT}" >> .env
 
+# the app image runs as uid 1000 ("www"); bind-mounted host paths must match
+chown -R 1000:1000 storage bootstrap/cache
+chown 1000:1000 .env
+chmod 664 .env
+
 echo "==> Building images"
 docker compose build
 
